@@ -16,7 +16,7 @@
             <c:choose>
                <c:when test="${principal != null}">
                 <li><a href="/">상품목록</a></li>
-                <li><a href="/">구매목록</a></li>
+                <li><a href="/product/purchase">구매목록</a></li>
                 <li><a href="/logout">로그아웃</a></li>               
                </c:when>
                <c:otherwise>
