@@ -1,5 +1,8 @@
 package shop.mtcoding.buyer6.controller;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,18 @@ public class UserController {
     HttpSession session;
 
     @GetMapping("/loginForm")
-    public String loginForm() {
+    public String loginForm(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+
+        String username = "";
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("remember")) {
+                username = cookie.getValue();
+            }
+        }
+
+        request.setAttribute("remember", username);
+
         return "user/loginForm";
     }
 
@@ -30,13 +44,34 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String username, String password) {
+    public String login(String username, String password, String remember, HttpServletResponse response) {
         User user = userRepository.findByUsernameAndPassword(username, password);
+
+        if (remember == null) {
+            remember = "";
+        }
+
         if (user == null) {
-            session.setAttribute("principal", user);
             return "redirect:/loginForm";
         } else {
+            if (remember.equals("on")) {
+                Cookie cookie = new Cookie("remember", username);
+                response.addCookie(cookie);
+            } else {
+                Cookie cookie = new Cookie("remember", "");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
+
+            session.setAttribute("principal", user);
             return "redirect:/";
         }
     }
+
+    @GetMapping("/logout")
+    public String logout() {
+        session.invalidate();
+        return "redirect:/";
+    }
+
 }
