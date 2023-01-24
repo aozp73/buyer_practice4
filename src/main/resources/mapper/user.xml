@@ -4,6 +4,26 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="shop.mtcoding.buyer6.model.UserRepository">
+  <insert id="insert">
+    insert into user_tb(username, password, email, created_at)
+                vaules(#{username},#{password},#{email},now())
+  </insert>
 
+  <select id="findAll" resultType="shop.mtcoding.buyer6.model.User">
+    select * from user_tb;
+  </select>
 
+  <select id="findById" resultType="shop.mtcoding.buyer6.model.User">
+    select * from user_tb where id = #{id}
+  </select>
+
+  <update id="updateById">
+    update user_tb
+       set password = #{password}
+     where id = #{id}
+  </update>
+
+  <delete id="deleteById">
+    delete from user_tb where id = #{id}
+  </delete>
 </mapper>
