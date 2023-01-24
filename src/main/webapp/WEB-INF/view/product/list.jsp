@@ -17,7 +17,7 @@
                     <td><a href="/product/${product.id}/detail">${product.name}</a> </td>
                     <td>${product.price}</td>
                     <td>${product.qty}</td>
-                    <td>${product.createdAt}</td>
+                    <td>${product.createdAtToString}</td>
                 </tr>
             </c:forEach>
         </table>
